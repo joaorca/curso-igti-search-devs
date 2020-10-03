@@ -29,7 +29,12 @@ const globalRadioOr = $('#radioOr');
  * Tudo começa aqui. A invocação desta função é feita
  * na última linha de código deste arquivo
  */
-function start() {
+async function start() {
+  /**
+   * Obtendo todos os dev's do backend
+   * de forma assíncrona
+   */
+  await fetchAllDevs();
   /**
    * Adicionando eventos aos inputs, checkboxes e radio buttons
    */
@@ -43,6 +48,37 @@ function start() {
   globalRadioOr.addEventListener('input', handleRadioClick);
 
   filterDevs();
+}
+
+/**
+ * Esta função é executada somente uma vez
+ * e traz todos os dev's do backend. Além disso,
+ * faz uma transformação nos dados, incluindo um
+ * campo para facilitar a pesquisa (removendo acentos,
+ * espaços em branco e tornando todo o texto minúsculo) e
+ * também um array contendo somente o nome das linguagens
+ * de programação que determinado dev conhece
+ */
+async function fetchAllDevs() {
+  const resource = await fetch('http://localhost:3001/devs');
+  const json = await resource.json();
+
+  const jsonWithImprovedSearch = json.map((item) => {
+    const { name, programmingLanguages } = item;
+
+    return {
+      ...item,
+      searchName: name
+        .toLocaleLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f\s]/g, ''),
+      onlyLanguages: programmingLanguages,
+    };
+  });
+
+  globalState.allDevs = [...jsonWithImprovedSearch];
+  globalState.filteredDevs = [...jsonWithImprovedSearch];
+  globalState.loadingData = false;
 }
 
 /**
@@ -88,6 +124,7 @@ function handleRadioClick({ target }) {
  */
 function filterDevs() {
   console.log('filter Devs');
+  console.table(globalState.filteredDevs);
 }
 
 /**
