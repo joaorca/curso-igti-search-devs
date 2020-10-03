@@ -140,6 +140,12 @@ function filterDevs() {
    */
   const textFromInput = globalInputName.value.toLocaleLowerCase().trim();
 
+  /**
+   * Obtendo array de linguagens de programação a partir dos
+   * checkboxes
+   */
+  const filterProgrammingLanguages = getFilteredProgrammingLanguages();
+
   let filteredDevs = allDevs;
 
   /**
@@ -158,6 +164,30 @@ function filterDevs() {
    */
   globalState.filteredDevs = filteredDevs;
   renderDevs();
+}
+
+/**
+ * Montamos um array de linguagens de programação,
+ * conforme a marcação dos checkboxes
+ */
+function getFilteredProgrammingLanguages() {
+  const { checkboxJava, checkboxJavaScript, checkboxPython } = globalState;
+
+  let filterProgrammingLanguages = [];
+
+  if (checkboxJava) {
+    filterProgrammingLanguages.push('java');
+  }
+
+  if (checkboxJavaScript) {
+    filterProgrammingLanguages.push('javascript');
+  }
+
+  if (checkboxPython) {
+    filterProgrammingLanguages.push('python');
+  }
+
+  return filterProgrammingLanguages;
 }
 
 /**
