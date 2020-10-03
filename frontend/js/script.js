@@ -30,8 +30,6 @@ const globalRadioOr = $('#radioOr');
  * na última linha de código deste arquivo
  */
 function start() {
-  console.log("Let's Start");
-
   /**
    * Adicionando eventos aos inputs, checkboxes e radio buttons
    */
@@ -43,6 +41,8 @@ function start() {
 
   globalRadioAnd.addEventListener('input', handleRadioClick);
   globalRadioOr.addEventListener('input', handleRadioClick);
+
+  filterDevs();
 }
 
 /**
@@ -50,7 +50,9 @@ function start() {
  * haverá uma nova filtragem e renderização
  * de dev's
  */
-function handleInputChange() {}
+function handleInputChange() {
+  filterDevs();
+}
 
 /**
  * Refletimos os cliques de cada checkbox no state.
@@ -60,6 +62,8 @@ function handleInputChange() {}
 function handleCheckboxClick({ target }) {
   const checkboxId = target.id;
   globalState[checkboxId] = !globalState[checkboxId];
+
+  filterDevs();
 }
 
 /**
@@ -71,6 +75,19 @@ function handleRadioClick({ target }) {
   const radioId = target.id;
   globalState.radioAnd = radioId === 'radioAnd';
   globalState.radioOr = radioId === 'radioOr';
+
+  filterDevs();
+}
+
+/**
+ * Principal função deste app.
+ *
+ * Filtra os dev's conforme definições
+ * do usuário e invoca a renderização
+ * da tela
+ */
+function filterDevs() {
+  console.log('filter Devs');
 }
 
 /**
