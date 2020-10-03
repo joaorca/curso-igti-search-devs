@@ -146,7 +146,29 @@ function filterDevs() {
    */
   const filterProgrammingLanguages = getFilteredProgrammingLanguages();
 
-  let filteredDevs = allDevs;
+  /**
+   * Obtendo os dev's com base nas linguagens de programação
+   * e se o usuário escolheu "OU", o que abrange mais opções do
+   * que "E" (mais limitado)
+   */
+  let filteredDevs = allDevs.filter(({ onlyLanguages }) => {
+    /**
+     * Com "OU", verificamos se pelo menos uma das linguagens
+     * definidas pelo usuário pertence às linguagens do dev.
+     * Ex: Se o usuário escolheu somente Java, vai chegar dev
+     * que sabe Java e Python
+     *
+     * Com "E", verificamos a comparação exata da(s) linguagem(ns)
+     * Ex: Se o usuário escolheu somente Java, vai chegar dev
+     * que sabe somente Java
+     */
+    // prettier-ignore
+    return radioOr
+      ? filterProgrammingLanguages.some((item) => onlyLanguages.includes(item))
+      : filterProgrammingLanguages.every((item) => onlyLanguages.includes(item)) 
+        &&
+        filterProgrammingLanguages.length === onlyLanguages.length
+  });
 
   /**
    * Após o primeiro filtro, filtramos mais uma vez
