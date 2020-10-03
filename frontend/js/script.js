@@ -133,8 +133,75 @@ function handleRadioClick({ target }) {
  * da tela
  */
 function filterDevs() {
-  console.log('filter Devs');
-  console.table(globalState.filteredDevs);
+  const { allDevs, radioOr } = globalState;
+
+  let filteredDevs = allDevs;
+
+  /**
+   * Definimos os dev's filtrados no estado do app
+   * e invocamos a função de renderização em seguida.
+   */
+  globalState.filteredDevs = filteredDevs;
+  renderDevs();
+}
+
+/**
+ * Função de renderização dos dev's em tela
+ */
+function renderDevs() {
+  const { filteredDevs } = globalState;
+
+  const devsToShow = filteredDevs
+    .map((dev) => {
+      return renderDev(dev);
+    })
+    .join('');
+
+  const renderedHTML = `
+       <div>
+         <h2>${filteredDevs.length} dev(s) encontrado(s)</h2>
+         <div class='row'>
+           ${devsToShow}
+         </div>
+       </div>
+    `;
+
+  globalDivDevs.innerHTML = renderedHTML;
+}
+
+/**
+ * Isolamos a função para renderizar um dev,
+ * utilizando algumas classes do Materialize
+ * e o próprio CSS do app
+ */
+function renderDev(dev) {
+  const { name, picture, programmingLanguages } = dev;
+
+  return `
+      <div class='col s12 m6 l4'>
+        <div class='dev-card'>
+          <img class='avatar' src="${picture}" alt="${name}" />
+          <div class='data'>
+            <span>${name}</span>
+            <span>${renderProgrammingLanguages(programmingLanguages)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+/**
+ * Função para renderizar as linguagens de programação
+ * através de ícones. Os ícones já foram fornecidos pelo
+ * app na pasta "img"
+ */
+function renderProgrammingLanguages(programmingLanguages) {
+  return programmingLanguages
+    .map(({ language }) => {
+      const src = `./img/${language.toLocaleLowerCase()}.png`;
+      return `<img class='language' src='${src}' alt='${language}' title='${language}' />`;
+    })
+    .join(' ');
 }
 
 /**
