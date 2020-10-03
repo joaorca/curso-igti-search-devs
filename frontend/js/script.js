@@ -135,7 +135,22 @@ function handleRadioClick({ target }) {
 function filterDevs() {
   const { allDevs, radioOr } = globalState;
 
+  /**
+   * Obtendo texto "limpo" do input
+   */
+  const textFromInput = globalInputName.value.toLocaleLowerCase().trim();
+
   let filteredDevs = allDevs;
+
+  /**
+   * Após o primeiro filtro, filtramos mais uma vez
+   * conforme o texto do input
+   */
+  if (textFromInput) {
+    filteredDevs = filteredDevs.filter(({ searchName }) =>
+      searchName.includes(textFromInput)
+    );
+  }
 
   /**
    * Definimos os dev's filtrados no estado do app
