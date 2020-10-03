@@ -72,13 +72,23 @@ async function fetchAllDevs() {
         .toLocaleLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f\s]/g, ''),
-      onlyLanguages: programmingLanguages,
+      onlyLanguages: getOnlyLanguagesFrom(programmingLanguages),
     };
   });
 
   globalState.allDevs = [...jsonWithImprovedSearch];
   globalState.filteredDevs = [...jsonWithImprovedSearch];
   globalState.loadingData = false;
+}
+
+/**
+ * Função para varrer o array de linguagens de programação
+ * e trazer somente o nome em minúsculas, de forma ordenada
+ */
+function getOnlyLanguagesFrom(programmingLanguages) {
+  return programmingLanguages
+    .map(({ language }) => language.toLocaleLowerCase())
+    .sort();
 }
 
 /**
